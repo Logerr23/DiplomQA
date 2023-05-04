@@ -7,18 +7,37 @@ import ru.netology.data.models.CreditRequestEntity;
 import ru.netology.data.models.OrderEntity;
 import ru.netology.data.models.PaymentEntity;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Properties;
 
 public class DataBase {
     public DataBase(){}
 
-    @SneakyThrows
-    public static Connection getConnection(){
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
+//    @SneakyThrows
+//    public static Connection getConnection(){
+//        return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
+//    }
+
+    public static Connection getConnection() throws SQLException, IOException {
+
+        Properties props = new Properties();
+        try(InputStream in = Files.newInputStream(Paths.get("./application.properties"))){
+            props.load(in);
+        }
+        String url = props.getProperty("spring.datasource.url");
+        String username = props.getProperty("spring.datasource.username");
+        String password = props.getProperty("spring.datasource.password");
+
+        return DriverManager.getConnection(url, username, password);
     }
 
     @SneakyThrows

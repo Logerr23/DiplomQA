@@ -18,7 +18,7 @@ public class DataHelper {
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
 
-        int length = random.nextInt(max - min) + min;
+        int length = faker.number().numberBetween(min, max);
 
         for(int i = 0; i < length; i++) {
             stringBuilder.append(symbols.charAt(random.nextInt(symbols.length())));
@@ -41,7 +41,7 @@ public class DataHelper {
         return new NumberCard("4444 4444 4444 4442");
     }
 
-    public static NumberCard malformedNumberCard(){
+    public static NumberCard shortNumberCard(){
         return new NumberCard(DataHelper.StringBuilder(1,15,"1234567890"));
     }
 
@@ -53,10 +53,11 @@ public class DataHelper {
     }
 
     public static Date validDate(){
-        long timeShift = faker.random().nextInt(0, 60);
-        LocalDate date = LocalDate.now().plusMonths(timeShift);
-        String month = date.format(DateTimeFormatter.ofPattern("MM"));
-        String year = date.format(DateTimeFormatter.ofPattern("yy"));
+        LocalDate date = LocalDate.now();
+        long timeShiftYear = faker.random().nextInt(0, 48);
+        long timeShiftMonth = faker.random().nextInt(date.getMonthValue(),12);
+        String year = date.plusMonths(timeShiftYear).format(DateTimeFormatter.ofPattern("yy"));
+        String month = date.plusMonths(timeShiftMonth).format(DateTimeFormatter.ofPattern("MM"));
         return new Date(month, year);
     }
 
@@ -105,8 +106,9 @@ public class DataHelper {
         return new Code(faker.numerify("###"));
     }
 
-    public static Code malformedCode(){
-        return new Code(DataHelper.StringBuilder(1,2,"1234567890"));
+    public static Code shortCode(){
+       int random = faker.number().numberBetween(0,99);
+        return new Code(Integer.toString(random));
     }
 
 
@@ -117,6 +119,10 @@ public class DataHelper {
 
     public static WrongData empty(){
         return new WrongData("");
+    }
+
+    public static WrongData oneNumber(){
+        return new WrongData(faker.numerify("#"));
     }
 
     public static WrongData multipleSpaces(){

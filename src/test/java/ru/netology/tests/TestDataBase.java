@@ -30,13 +30,15 @@ public class TestDataBase {
     void shouldSuccessfullyRedeem(){
 
         var buyPage = new BuyPage();
-        buyPage.cardDataEntry(DataHelper.approvedNumberCard().getNumberCard(),
+        buyPage.cardDataEntry(
+                DataHelper.approvedNumberCard().getNumberCard(),
                 DataHelper.validDate().getMonth(),
                 DataHelper.validDate().getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
-        buyPage.getNotificationOk();
+        buyPage.buttonNotificationVisible();
+        buyPage.notificationOkVisible();
 
         var info = DataBase.getOrderEntity().getId();
         Assertions.assertNotNull(info);

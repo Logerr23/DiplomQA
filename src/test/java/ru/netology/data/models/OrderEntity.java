@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class OrderEntity {
 
     private String id;
-    private LocalDateTime created;
+    private String created;
     private String creditId;
     private String paymentId;
 

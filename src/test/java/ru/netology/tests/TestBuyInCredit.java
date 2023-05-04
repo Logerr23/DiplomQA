@@ -31,7 +31,8 @@ public class TestBuyInCredit {
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyInCreditPage.clickBuy();
-        buyInCreditPage.getNotificationOk();
+        buyInCreditPage.buttonNotificationVisible();
+        buyInCreditPage.notificationOkVisible();
 
     }
 }

@@ -38,29 +38,49 @@ public class FormPage {
 
     public void clickBuy(){
         paymentButton.click();
+    }
+    public void buttonNotificationVisible(){
         paymentButtonNotification.shouldBe(visible);
     }
 
 
-    public void getNotificationError(){
+    public void notificationErrorVisible(){
         notificationError.shouldBe(visible, Duration.ofSeconds(15));
+        notificationOk.shouldNot(visible, Duration.ofSeconds(15));
     }
-    public void getNotificationOk(){
+    public void notificationOkVisible(){
         notificationOk.shouldBe(visible, Duration.ofSeconds(15));
+        notificationError.shouldNot(visible, Duration.ofSeconds(15));
     }
 
 
     public void getErrorEmpty(){
         errorEmpty.shouldBe(visible);
+
+        errorFormat.shouldNot(visible);
+        errorCardExpired.shouldNot(visible);
+        errorWrongDateCard.shouldNot(visible);
     }
     public void getErrorFormat(){
         errorFormat.shouldBe(visible);
+
+        errorEmpty.shouldNot(visible);
+        errorCardExpired.shouldNot(visible);
+        errorWrongDateCard.shouldNot(visible);
     }
     public void getErrorCardExpired(){
         errorCardExpired.shouldBe(visible);
+
+        errorFormat.shouldNot(visible);
+        errorEmpty.shouldNot(visible);
+        errorWrongDateCard.shouldNot(visible);
     }
     public void getErrorWrongDateCard(){
         errorWrongDateCard.shouldBe(visible);
+
+        errorFormat.shouldNot(visible);
+        errorCardExpired.shouldNot(visible);
+        errorEmpty.shouldNot(visible);
     }
 
 }
