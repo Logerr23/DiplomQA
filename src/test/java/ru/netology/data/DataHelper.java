@@ -41,6 +41,10 @@ public class DataHelper {
         return new NumberCard("4444 4444 4444 4442");
     }
 
+    public static NumberCard wrongNumberCard() {
+        return new NumberCard(faker.numerify("#### #### #### ####"));
+    }
+
     public static NumberCard shortNumberCard(){
         return new NumberCard(DataHelper.StringBuilder(1,15,"1234567890"));
     }
@@ -52,16 +56,15 @@ public class DataHelper {
         private String year;
     }
 
-    public static Date validDate(){
-        LocalDate date = LocalDate.now();
-        long timeShiftYear = faker.random().nextInt(0, 48);
-        long timeShiftMonth = faker.random().nextInt(date.getMonthValue(),12);
-        String year = date.plusMonths(timeShiftYear).format(DateTimeFormatter.ofPattern("yy"));
-        String month = date.plusMonths(timeShiftMonth).format(DateTimeFormatter.ofPattern("MM"));
+    public static Date getValidDate(){
+        long timeShift = faker.random().nextInt(0, 60);
+        LocalDate date = LocalDate.now().plusMonths(timeShift);
+        String month = date.format(DateTimeFormatter.ofPattern("MM"));
+        String year = date.format(DateTimeFormatter.ofPattern("yy"));
         return new Date(month, year);
     }
 
-    public static Date pastDate(){
+    public static Date getPastDate(){
         long timeShift = faker.random().nextInt(1, 120);
         LocalDate date = LocalDate.now().minusMonths(timeShift);
         String month = date.format(DateTimeFormatter.ofPattern("MM"));
@@ -69,7 +72,7 @@ public class DataHelper {
         return new Date(month, year);
     }
 
-    public static Date overFiveYearsDate(){
+    public static Date getOverFiveYearsDate(){
         long timeShift = faker.random().nextInt(61, 120);
         LocalDate date = LocalDate.now().plusMonths(timeShift);
         String month = date.format(DateTimeFormatter.ofPattern("MM"));
@@ -123,6 +126,10 @@ public class DataHelper {
 
     public static WrongData oneNumber(){
         return new WrongData(faker.numerify("#"));
+    }
+
+    public static WrongData randomNumbers(){
+        return new WrongData(DataHelper.StringBuilder(1,15,"0123456789"));
     }
 
     public static WrongData multipleSpaces(){

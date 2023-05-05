@@ -25,9 +25,10 @@ public class TestBuyInCredit {
     void shouldSuccessfullyPay(){
 
         var buyInCreditPage = new BuyInCreditPage();
+        var date = DataHelper.getValidDate();
         buyInCreditPage.cardDataEntry(DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyInCreditPage.clickBuy();

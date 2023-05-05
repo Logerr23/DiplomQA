@@ -1,11 +1,10 @@
 package ru.netology.tests;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import ru.netology.data.DataBase;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
+import ru.netology.data.DataBaseHelper;
 import ru.netology.data.DataHelper;
 import ru.netology.page.BuyPage;
 import ru.netology.page.StartPage;
@@ -13,6 +12,16 @@ import ru.netology.page.StartPage;
 import static com.codeborne.selenide.Selenide.open;
 
 public class TestBuy {
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
 
     @BeforeEach
     void setup(){
@@ -23,7 +32,7 @@ public class TestBuy {
 
     @AfterEach
     public void clearDataBase(){
-        DataBase.clearDataBase();
+        DataBaseHelper.clearDataBase();
     }
 
 
@@ -32,15 +41,20 @@ public class TestBuy {
     void shouldSuccessfullyPay(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.buttonNotificationVisible();
         buyPage.notificationOkVisible();
+
+        Assertions.assertEquals("APPROVED", DataBaseHelper.getPaymentEntity().getStatus());
+
+
     }
 
     @Test
@@ -48,15 +62,38 @@ public class TestBuy {
     void shouldTryToPayWithDeclinedCard(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.declinedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.buttonNotificationVisible();
         buyPage.notificationErrorVisible();
+
+        Assertions.assertEquals("DECLINED", DataBaseHelper.getPaymentEntity().getStatus());
+
+    }
+
+    @Test
+    @DisplayName("Попытка оплатить картой не зарегистрированной в банке")
+    void shouldTryToPayWithWrongCard(){
+
+        var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
+        buyPage.cardDataEntry(
+                DataHelper.wrongNumberCard().getNumberCard(),
+                date.getMonth(),
+                date.getYear(),
+                DataHelper.validName().getName(),
+                DataHelper.validCode().getCode());
+        buyPage.clickBuy();
+        buyPage.buttonNotificationVisible();
+        buyPage.notificationErrorVisible();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -64,14 +101,17 @@ public class TestBuy {
     void shouldBeNoticeIfNumberCardIsShort(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.shortNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -79,14 +119,17 @@ public class TestBuy {
     void shouldBeNoticeIfNumberCardIsEmpty(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.empty().getWrongData(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -97,11 +140,13 @@ public class TestBuy {
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
                 DataHelper.oneNumber().getWrongData(),
-                DataHelper.validDate().getYear(),
+                DataHelper.getValidDate().getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -112,11 +157,13 @@ public class TestBuy {
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
                 DataHelper.empty().getWrongData(),
-                DataHelper.validDate().getYear(),
+                DataHelper.getValidDate().getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -126,12 +173,14 @@ public class TestBuy {
         var buyPage = new BuyPage();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
+                DataHelper.getValidDate().getMonth(),
                 DataHelper.oneNumber().getWrongData(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -141,12 +190,14 @@ public class TestBuy {
         var buyPage = new BuyPage();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
+                DataHelper.getValidDate().getMonth(),
                 DataHelper.empty().getWrongData(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -154,14 +205,17 @@ public class TestBuy {
     void shouldBeNoticeIfCardExpired(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getPastDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.pastDate().getMonth(),
-                DataHelper.pastDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorCardExpired();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -169,14 +223,17 @@ public class TestBuy {
     void shouldBeNoticeIfOverFiveYearsDate(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getOverFiveYearsDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.overFiveYearsDate().getMonth(),
-                DataHelper.overFiveYearsDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorWrongDateCard();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -184,14 +241,17 @@ public class TestBuy {
     void shouldBeNoticeIfCVCisShort(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.shortCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -199,14 +259,17 @@ public class TestBuy {
     void shouldBeNoticeIfCVCIsEmpty(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.validName().getName(),
                 DataHelper.empty().getWrongData());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -214,14 +277,17 @@ public class TestBuy {
     void shouldBeNoticeIfHolderIsEmpty(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.empty().getWrongData(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -229,14 +295,17 @@ public class TestBuy {
     void shouldBeNoticeIfHolderInСyrillic(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.cyrillicName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -244,14 +313,17 @@ public class TestBuy {
     void shouldBeNoticeIfHolderInSpaces(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
+                date.getMonth(),
+                date.getYear(),
                 DataHelper.multipleSpaces().getWrongData(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 
     @Test
@@ -259,13 +331,34 @@ public class TestBuy {
     void shouldBeNoticeIfHolderInSpecialSymbols(){
 
         var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
                 DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.validDate().getMonth(),
-                DataHelper.validDate().getYear(),
-                DataHelper.multipleSpaces().getWrongData(),
+                date.getMonth(),
+                date.getYear(),
+                DataHelper.specialSymbols().getWrongData(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
-        buyPage.getErrorEmpty();
+        buyPage.getErrorFormat();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
+    }
+
+    @Test
+    @DisplayName("поле Владелец заполнено цифрами")
+    void shouldBeNoticeIfHolderInNumbers(){
+
+        var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
+        buyPage.cardDataEntry(
+                DataHelper.approvedNumberCard().getNumberCard(),
+                date.getMonth(),
+                date.getYear(),
+                DataHelper.randomNumbers().getWrongData(),
+                DataHelper.validCode().getCode());
+        buyPage.clickBuy();
+        buyPage.getErrorFormat();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
 }
