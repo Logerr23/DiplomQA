@@ -16,6 +16,7 @@ public class TestBuy {
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
+        DataBaseHelper.clearDataBase();
     }
 
     @AfterAll
@@ -92,6 +93,8 @@ public class TestBuy {
         buyPage.clickBuy();
         buyPage.buttonNotificationVisible();
         buyPage.notificationErrorVisible();
+        buyPage.notificationErrorClose();
+        buyPage.notificationOkNotVisible();
 
         Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
@@ -162,6 +165,23 @@ public class TestBuy {
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
+    }
+
+    @Test
+    @DisplayName("в поле Месяц введено '00'")
+    void shouldBeNoticeIfMonthIsWrong(){
+
+        var buyPage = new BuyPage();
+        buyPage.cardDataEntry(
+                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.zeros().getWrongData(),
+                DataHelper.getValidDate().getYear(),
+                DataHelper.validName().getName(),
+                DataHelper.validCode().getCode());
+        buyPage.clickBuy();
+        buyPage.getErrorWrongDateCard();
 
         Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
     }
@@ -355,6 +375,24 @@ public class TestBuy {
                 date.getMonth(),
                 date.getYear(),
                 DataHelper.randomNumbers().getWrongData(),
+                DataHelper.validCode().getCode());
+        buyPage.clickBuy();
+        buyPage.getErrorFormat();
+
+        Assertions.assertTrue(DataBaseHelper.DataBaseIsEmpty());
+    }
+
+    @Test
+    @DisplayName("поле Владелец заполнено 27 символами")
+    void shouldBeNoticeIfHolderInLongName(){
+
+        var buyPage = new BuyPage();
+        var date = DataHelper.getValidDate();
+        buyPage.cardDataEntry(
+                DataHelper.approvedNumberCard().getNumberCard(),
+                date.getMonth(),
+                date.getYear(),
+                DataHelper.longName().getName(),
                 DataHelper.validCode().getCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();

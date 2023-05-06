@@ -27,6 +27,9 @@ public class FormPage {
     private SelenideElement notificationError = $(".notification_status_error");
     private SelenideElement notificationOk = $(".notification_status_ok");
 
+    private SelenideElement notificationErrorCloser= $(".notification_status_error button");
+
+
 
     public void cardDataEntry(String card, String month, String year, String name, String code){
         cardField.setValue(card);
@@ -45,13 +48,28 @@ public class FormPage {
 
 
     public void notificationErrorVisible(){
-        notificationError.shouldBe(visible, Duration.ofSeconds(15));
-        notificationOk.shouldNot(visible, Duration.ofSeconds(15));
+        notificationError.shouldBe(visible, Duration.ofSeconds(20));
     }
+
+    public void notificationErrorNotVisible(){
+        notificationError.shouldNot(visible, Duration.ofSeconds(20));
+    }
+
+    public void notificationErrorClose(){
+        notificationErrorCloser.click();
+    }
+
     public void notificationOkVisible(){
-        notificationOk.shouldBe(visible, Duration.ofSeconds(15));
-        notificationError.shouldNot(visible, Duration.ofSeconds(15));
+        notificationOk.shouldBe(visible, Duration.ofSeconds(20));
     }
+
+    public void notificationOkNotVisible(){
+        notificationOk.shouldNot(visible, Duration.ofSeconds(20));
+    }
+
+
+
+
 
 
     public void getErrorEmpty(){

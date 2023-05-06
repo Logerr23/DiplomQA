@@ -57,7 +57,7 @@ public class DataHelper {
     }
 
     public static Date getValidDate(){
-        long timeShift = faker.random().nextInt(0, 60);
+        long timeShift = faker.random().nextInt(12, 60);
         LocalDate date = LocalDate.now().plusMonths(timeShift);
         String month = date.format(DateTimeFormatter.ofPattern("MM"));
         String year = date.format(DateTimeFormatter.ofPattern("yy"));
@@ -65,7 +65,7 @@ public class DataHelper {
     }
 
     public static Date getPastDate(){
-        long timeShift = faker.random().nextInt(1, 120);
+        long timeShift = faker.random().nextInt(2, 120);
         LocalDate date = LocalDate.now().minusMonths(timeShift);
         String month = date.format(DateTimeFormatter.ofPattern("MM"));
         String year = date.format(DateTimeFormatter.ofPattern("yy"));
@@ -99,6 +99,10 @@ public class DataHelper {
         return new Name(lastName + " " + firstName);
     }
 
+    public static Name longName(){
+        return new Name("QWERTYUIOPASDFGHJKLZXCVBNMQ");
+    }
+
 
     @Value
     public static class Code{
@@ -122,6 +126,10 @@ public class DataHelper {
 
     public static WrongData empty(){
         return new WrongData("");
+    }
+
+    public static WrongData zeros(){
+        return new WrongData("00");
     }
 
     public static WrongData oneNumber(){
