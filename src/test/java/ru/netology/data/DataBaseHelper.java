@@ -27,11 +27,9 @@ public class DataBaseHelper {
     @SneakyThrows
     public static void clearDataBase(){
         var conn = getConnection();
-        conn.createStatement().executeUpdate("SET FOREIGN_KEY_CHECKS = 0;");
         conn.createStatement().executeUpdate("TRUNCATE payment_entity;");
         conn.createStatement().executeUpdate("TRUNCATE credit_request_entity;");
         conn.createStatement().executeUpdate("TRUNCATE order_entity");
-        conn.createStatement().executeUpdate("SET FOREIGN_KEY_CHECKS = 1;");
     }
 
     @SneakyThrows
