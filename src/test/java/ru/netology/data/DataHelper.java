@@ -2,7 +2,6 @@ package ru.netology.data;
 
 import com.github.javafaker.Faker;
 import lombok.Value;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -14,41 +13,15 @@ public class DataHelper {
 
     private static Faker faker = new Faker();
 
-    private static String StringBuilder(int min, int max, String symbols){
+    private static String stringBuilder(int min, int max, String symbols){
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
-
         int length = faker.number().numberBetween(min, max);
-
         for(int i = 0; i < length; i++) {
             stringBuilder.append(symbols.charAt(random.nextInt(symbols.length())));
         }
         return stringBuilder.toString();
     }
-
-
-
-    @Value
-    public static class NumberCard{
-        private String numberCard;
-    }
-
-    public static NumberCard approvedNumberCard() {
-        return new NumberCard("4444 4444 4444 4441");
-    }
-
-    public static NumberCard declinedNumberCard() {
-        return new NumberCard("4444 4444 4444 4442");
-    }
-
-    public static NumberCard wrongNumberCard() {
-        return new NumberCard(faker.numerify("#### #### #### ####"));
-    }
-
-    public static NumberCard shortNumberCard(){
-        return new NumberCard(DataHelper.StringBuilder(1,15,"1234567890"));
-    }
-
 
     @Value
     public static class Date{
@@ -80,73 +53,66 @@ public class DataHelper {
         return new Date(month, year);
     }
 
-    @Value
-    public static class Name{
-        private String name;
+    public static String getApprovedNumberCard() {
+        return ("4444 4444 4444 4441");
+    }
+    public static String getDeclinedNumberCard() {
+        return ("4444 4444 4444 4442");
+    }
+    public static String getWrongNumberCard() {
+        return (faker.numerify("#### #### #### ####"));
+    }
+    public static String getShortNumberCard(){
+        return (DataHelper.stringBuilder(1,15,"1234567890"));
     }
 
-    public static Name validName(){
+    public static String getValidName(){
         faker = new Faker(new Locale("en"));
         String lastName = faker.name().lastName();
         String firstName = faker.name().firstName();
-        return new Name(lastName + " " + firstName);
+        return (lastName + " " + firstName);
     }
 
-    public static Name cyrillicName(){
+    public static String getCyrillicName(){
         faker = new Faker(new Locale("ru_RU"));
         String lastName = faker.name().lastName();
         String firstName = faker.name().firstName();
-        return new Name(lastName + " " + firstName);
+        return (lastName + " " + firstName);
     }
 
-    public static Name longName(){
-        return new Name("QWERTYUIOPASDFGHJKLZXCVBNMQ");
+    public static String getLongName(){
+        return ("QWERTYUIOPASDFGHJKLZXCVBNMQ");
     }
 
-
-    @Value
-    public static class Code{
-        private String code;
+    public static String getValidCode(){
+        return (faker.numerify("###"));
     }
 
-    public static Code validCode(){
-        return new Code(faker.numerify("###"));
-    }
-
-    public static Code shortCode(){
+    public static String getShortCode(){
        int random = faker.number().numberBetween(0,99);
-        return new Code(Integer.toString(random));
+        return (Integer.toString(random));
+    }
+    public static String getEmpty(){
+        return ("");
     }
 
-
-    @Value
-    public static class WrongData{
-        private String wrongData;
+    public static String getZeros(){
+        return ("00");
     }
 
-    public static WrongData empty(){
-        return new WrongData("");
+    public static String getOneNumber(){
+        return (faker.numerify("#"));
     }
 
-    public static WrongData zeros(){
-        return new WrongData("00");
+    public static String getRandomNumbers(){
+        return (DataHelper.stringBuilder(1,15,"0123456789"));
     }
 
-    public static WrongData oneNumber(){
-        return new WrongData(faker.numerify("#"));
+    public static String getMultipleSpaces(){
+        return (DataHelper.stringBuilder(1,15," "));
     }
 
-    public static WrongData randomNumbers(){
-        return new WrongData(DataHelper.StringBuilder(1,15,"0123456789"));
+    public static String getSpecialSymbols(){
+        return (DataHelper.stringBuilder(1,15,"!@#$%^&*()_+=,.<>?/"));
     }
-
-    public static WrongData multipleSpaces(){
-        return new WrongData(DataHelper.StringBuilder(1,15," "));
-    }
-
-    public static WrongData specialSymbols(){
-        return new WrongData(DataHelper.StringBuilder(1,15,"!@#$%^&*()_+=,.<>?/"));
-    }
-
-
 }

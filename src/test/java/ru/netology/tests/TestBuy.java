@@ -8,7 +8,6 @@ import ru.netology.data.DataBaseHelper;
 import ru.netology.data.DataHelper;
 import ru.netology.page.BuyPage;
 import ru.netology.page.StartPage;
-
 import static com.codeborne.selenide.Selenide.open;
 
 public class TestBuy {
@@ -44,18 +43,16 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.buttonNotificationVisible();
         buyPage.notificationOkVisible();
 
         Assertions.assertEquals("APPROVED", DataBaseHelper.getPaymentEntity().getStatus());
-
-
     }
 
     @Test
@@ -65,17 +62,16 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.declinedNumberCard().getNumberCard(),
+                DataHelper.getDeclinedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.buttonNotificationVisible();
         buyPage.notificationErrorVisible();
 
         Assertions.assertEquals("DECLINED", DataBaseHelper.getPaymentEntity().getStatus());
-
     }
 
     @Test
@@ -85,11 +81,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.wrongNumberCard().getNumberCard(),
+                DataHelper.getWrongNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.buttonNotificationVisible();
         buyPage.notificationErrorVisible();
@@ -106,11 +102,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.shortNumberCard().getNumberCard(),
+                DataHelper.getShortNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
 
@@ -124,11 +120,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.empty().getWrongData(),
+                DataHelper.getEmpty(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
 
@@ -141,11 +137,11 @@ public class TestBuy {
 
         var buyPage = new BuyPage();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.oneNumber().getWrongData(),
+                DataHelper.getApprovedNumberCard(),
+                DataHelper.getOneNumber(),
                 DataHelper.getValidDate().getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
 
@@ -158,11 +154,11 @@ public class TestBuy {
 
         var buyPage = new BuyPage();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.empty().getWrongData(),
+                DataHelper.getApprovedNumberCard(),
+                DataHelper.getEmpty(),
                 DataHelper.getValidDate().getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
 
@@ -175,11 +171,11 @@ public class TestBuy {
 
         var buyPage = new BuyPage();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
-                DataHelper.zeros().getWrongData(),
+                DataHelper.getApprovedNumberCard(),
+                DataHelper.getZeros(),
                 DataHelper.getValidDate().getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorWrongDateCard();
 
@@ -192,11 +188,11 @@ public class TestBuy {
 
         var buyPage = new BuyPage();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 DataHelper.getValidDate().getMonth(),
-                DataHelper.oneNumber().getWrongData(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getOneNumber(),
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
 
@@ -209,11 +205,11 @@ public class TestBuy {
 
         var buyPage = new BuyPage();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 DataHelper.getValidDate().getMonth(),
-                DataHelper.empty().getWrongData(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getEmpty(),
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
 
@@ -227,11 +223,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getPastDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorCardExpired();
 
@@ -245,11 +241,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getOverFiveYearsDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorWrongDateCard();
 
@@ -263,11 +259,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.shortCode().getCode());
+                DataHelper.getValidName(),
+                DataHelper.getShortCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
 
@@ -281,11 +277,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.validName().getName(),
-                DataHelper.empty().getWrongData());
+                DataHelper.getValidName(),
+                DataHelper.getEmpty());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
 
@@ -299,11 +295,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.empty().getWrongData(),
-                DataHelper.validCode().getCode());
+                DataHelper.getEmpty(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
 
@@ -317,11 +313,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.cyrillicName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getCyrillicName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
 
@@ -335,11 +331,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.multipleSpaces().getWrongData(),
-                DataHelper.validCode().getCode());
+                DataHelper.getMultipleSpaces(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorEmpty();
 
@@ -353,11 +349,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.specialSymbols().getWrongData(),
-                DataHelper.validCode().getCode());
+                DataHelper.getSpecialSymbols(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
 
@@ -371,11 +367,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.randomNumbers().getWrongData(),
-                DataHelper.validCode().getCode());
+                DataHelper.getRandomNumbers(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
 
@@ -389,11 +385,11 @@ public class TestBuy {
         var buyPage = new BuyPage();
         var date = DataHelper.getValidDate();
         buyPage.cardDataEntry(
-                DataHelper.approvedNumberCard().getNumberCard(),
+                DataHelper.getApprovedNumberCard(),
                 date.getMonth(),
                 date.getYear(),
-                DataHelper.longName().getName(),
-                DataHelper.validCode().getCode());
+                DataHelper.getLongName(),
+                DataHelper.getValidCode());
         buyPage.clickBuy();
         buyPage.getErrorFormat();
 

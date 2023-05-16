@@ -7,12 +7,9 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import ru.netology.data.models.CreditRequestEntity;
 import ru.netology.data.models.OrderEntity;
 import ru.netology.data.models.PaymentEntity;
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 
 public class DataBaseHelper {
     public DataBaseHelper(){}
@@ -34,39 +31,26 @@ public class DataBaseHelper {
 
     @SneakyThrows
     public static OrderEntity getOrderEntity(){
-
         var orderSQL = "SELECT * FROM order_entity;";
         var runner = new QueryRunner();
-
-        try (
-                var conn = getConnection();
-                ) {
-            return runner.query(conn, orderSQL, new BeanHandler<>(OrderEntity.class));
-        }
+        var conn = getConnection();
+        return runner.query(conn, orderSQL, new BeanHandler<>(OrderEntity.class));
     }
 
     @SneakyThrows
     public static PaymentEntity getPaymentEntity(){
-
         var paymentSQL = "SELECT * FROM payment_entity;";
         var runner = new QueryRunner();
-
-        try (var conn = getConnection()) {
-            return runner.query(conn, paymentSQL, new BeanHandler<>(PaymentEntity.class));
-        }
+        var conn = getConnection();
+        return runner.query(conn, paymentSQL, new BeanHandler<>(PaymentEntity.class));
     }
 
     @SneakyThrows
     public static CreditRequestEntity getCreditRequestEntity(){
-
         var creditSQL = "SELECT * FROM credit_request_entity;";
         var runner = new QueryRunner();
-
-        try (
-                var conn = getConnection();
-        ) {
-            return runner.query(conn, creditSQL, new BeanHandler<>(CreditRequestEntity.class));
-        }
+        var conn = getConnection();
+        return runner.query(conn, creditSQL, new BeanHandler<>(CreditRequestEntity.class));
     }
 
     @SneakyThrows
@@ -74,12 +58,8 @@ public class DataBaseHelper {
 
         var countSQL = "SELECT count(*) FROM order_entity;";
         var runner = new QueryRunner();
-
-        try (
-                var conn = getConnection();
-        ) {
-            return runner.query(conn, countSQL, new ScalarHandler<>());
-        }
+        var conn = getConnection();
+        return runner.query(conn, countSQL, new ScalarHandler<>());
     }
 
     public static Boolean  DataBaseIsEmpty(){
